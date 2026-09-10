@@ -19,13 +19,15 @@ import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 const GLTF_PATH = "/assets/kartu.glb";
-const BAND_TEXTURE_PATH = "/assets/bandd.png";
+const BAND_TEXTURE_PATH = "/assets/bandd.png?v=3";
+const BAND_TEXTURE_RED_PATH = "/assets/bandd_red.png?v=3";
 const CARD_TEXTURE_PATH = "/assets/card_texture.png?v=3";
 const CARD_TEXTURE_RED_PATH = "/assets/card_texture_red.png?v=3";
 
 // Preload assets
 useGLTF.preload(GLTF_PATH);
 useTexture.preload(BAND_TEXTURE_PATH);
+useTexture.preload(BAND_TEXTURE_RED_PATH);
 useTexture.preload(CARD_TEXTURE_PATH);
 useTexture.preload(CARD_TEXTURE_RED_PATH);
 
@@ -68,11 +70,17 @@ function Band({
   };
 
   const { nodes, materials }: any = useGLTF(GLTF_PATH);
-  const bandTexture = useTexture(BAND_TEXTURE_PATH);
+  const bandTextureCyan = useTexture(BAND_TEXTURE_PATH);
+  const bandTextureRed = useTexture(BAND_TEXTURE_RED_PATH);
   const cardTextureCyan = useTexture(CARD_TEXTURE_PATH);
   const cardTextureRed = useTexture(CARD_TEXTURE_RED_PATH);
 
   // Configure texture parameters
+  [bandTextureCyan, bandTextureRed].forEach((tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  });
+
   [cardTextureCyan, cardTextureRed].forEach((tex) => {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.minFilter = THREE.LinearFilter;
@@ -82,6 +90,7 @@ function Band({
     tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
   });
 
+  const bandTexture = colorScheme === "red" ? bandTextureRed : bandTextureCyan;
   const cardTexture = colorScheme === "red" ? cardTextureRed : cardTextureCyan;
 
   const { width, height } = useThree((state) => state.size);
@@ -233,8 +242,8 @@ function Band({
 
   return (
     <>
-      {/* Anchor fixed at top: [isMobile ? 0 : 0.8, 4.0, 0] matching Davin's proportion */}
-      <group position={[isMobile ? 0 : 0.8, 4.0, 0]}>
+      {/* Anchor fixed at top: [isMobile ? 0 : 0.8, isMobile ? 4.3 : 4.0, 0] matching Davin's proportion */}
+      <group position={[isMobile ? 0 : 0.8, isMobile ? 4.3 : 4.0, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
@@ -254,8 +263,8 @@ function Band({
           {/* Medium, balanced size collider matching Davin */}
           <CuboidCollider args={[0.85, 1.12, 0.01]} />
           <group
-            scale={2.2}
-            position={[0, -1.2, -0.05]}
+            scale={isMobile ? 2.75 : 2.2}
+            position={[0, isMobile ? -1.35 : -1.2, -0.05]}
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
             onPointerUp={(e: any) => {
@@ -303,7 +312,7 @@ function Band({
           resolution={[width, height]}
           useMap
           map={bandTexture}
-          repeat={[-4, 1]}
+          repeat={isMobile ? [-3, 1] : [-4, 1]}
           lineWidth={1}
         />
       </mesh>
@@ -334,9 +343,9 @@ export default function Card3DLanyard({
   }, []);
 
   return (
-    <div className={`relative w-full h-[560px] sm:h-[620px] lg:h-[700px] overflow-visible ${className}`}>
+    <div className={`relative w-full h-[640px] sm:h-[660px] lg:h-[700px] overflow-visible ${className}`}>
       <Canvas
-        camera={{ position: [0, 0, 13], fov: 27 }}
+        camera={{ position: [0, 0, isMobile ? 12.2 : 13], fov: isMobile ? 29 : 27 }}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         dpr={[1, 2]}
         style={{ pointerEvents: "auto", background: "transparent", width: "100%", height: "100%" }}

@@ -304,7 +304,10 @@ html.color-red .drop-shadow-\[0_0_20px_rgba\(0\,229\,255\,0\.35\)\] {
 
 /* Gradient metric text in Hero */
 html.color-red .bg-gradient-to-r.from-\[\#6c63ff\].to-\[\#00e5ff\] {
-  background: linear-gradient(to right, #be123c, #ef4444) !important;
+  background-image: linear-gradient(to right, #fb923c, #ef4444) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 /* Emerald status dot → red */
