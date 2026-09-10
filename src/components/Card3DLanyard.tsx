@@ -242,8 +242,8 @@ function Band({
 
   return (
     <>
-      {/* Anchor fixed at top: [isMobile ? 0 : 0.8, isMobile ? 4.3 : 4.0, 0] matching Davin's proportion */}
-      <group position={[isMobile ? 0 : 0.8, isMobile ? 4.3 : 4.0, 0]}>
+      {/* Anchor fixed at top: [isMobile ? 0 : 0.8, isMobile ? 5.2 : 4.0, 0] so lanyard extends off-screen top */}
+      <group position={[isMobile ? 0 : 0.8, isMobile ? 5.2 : 4.0, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
@@ -263,8 +263,8 @@ function Band({
           {/* Medium, balanced size collider matching Davin */}
           <CuboidCollider args={[0.85, 1.12, 0.01]} />
           <group
-            scale={isMobile ? 2.75 : 2.2}
-            position={[0, isMobile ? -1.35 : -1.2, -0.05]}
+            scale={isMobile ? 2.6 : 2.2}
+            position={[0, isMobile ? -1.25 : -1.2, -0.05]}
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
             onPointerUp={(e: any) => {
@@ -312,7 +312,7 @@ function Band({
           resolution={[width, height]}
           useMap
           map={bandTexture}
-          repeat={isMobile ? [-3, 1] : [-4, 1]}
+          repeat={isMobile ? [-2.2, 1] : [-3, 1]}
           lineWidth={1}
         />
       </mesh>
