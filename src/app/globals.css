@@ -1,0 +1,378 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #050816;
+  --color-foreground: #f8fafc;
+  --color-accent: #00e5ff;
+  --color-accent-blue: #38bdf8;
+  --color-accent-indigo: #6c63ff;
+  --color-accent-pink: #ff4d9d;
+  --color-surface: #0a0f24;
+  --color-surface-elevated: #0f1738;
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-hover: rgba(0, 229, 255, 0.45);
+  --color-muted: #94a3b8;
+  --font-sans: "Inter", var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), "JetBrains Mono", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: #050816;
+}
+
+/* ============================================
+   Smooth transitions for color scheme toggle
+   ============================================ */
+body,
+nav,
+section,
+div,
+header,
+footer,
+a,
+span,
+p,
+h1, h2, h3, h4,
+button {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ============================================
+   CYAN MODE (Default) — Body
+   ============================================ */
+body {
+  background-color: #050816;
+  background-image:
+    radial-gradient(circle at 75% 15%, rgba(108, 99, 255, 0.28) 0%, transparent 55%),
+    radial-gradient(circle at 18% 35%, rgba(0, 229, 255, 0.20) 0%, transparent 50%),
+    /* Mid-page glow for About/Skills */
+    radial-gradient(circle at 80% 45%, rgba(0, 229, 255, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 15% 55%, rgba(108, 99, 255, 0.12) 0%, transparent 50%),
+    /* Lower-page glow for Projects/Experience */
+    radial-gradient(circle at 70% 70%, rgba(56, 189, 248, 0.11) 0%, transparent 50%),
+    radial-gradient(circle at 25% 80%, rgba(108, 99, 255, 0.10) 0%, transparent 50%),
+    /* Bottom area */
+    radial-gradient(circle at 60% 90%, rgba(56, 189, 248, 0.14) 0%, transparent 60%),
+    radial-gradient(circle at 30% 95%, rgba(255, 77, 157, 0.10) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   RED MODE — Body Override
+   ============================================ */
+html.color-red body {
+  background-image:
+    radial-gradient(circle at 75% 15%, rgba(190, 18, 60, 0.32) 0%, transparent 55%),
+    radial-gradient(circle at 18% 35%, rgba(239, 68, 68, 0.22) 0%, transparent 50%),
+    /* Mid-page glow */
+    radial-gradient(circle at 80% 45%, rgba(239, 68, 68, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 15% 55%, rgba(190, 18, 60, 0.14) 0%, transparent 50%),
+    /* Lower-page glow */
+    radial-gradient(circle at 70% 70%, rgba(251, 146, 60, 0.11) 0%, transparent 50%),
+    radial-gradient(circle at 25% 80%, rgba(190, 18, 60, 0.10) 0%, transparent 50%),
+    /* Bottom area */
+    radial-gradient(circle at 60% 90%, rgba(251, 146, 60, 0.14) 0%, transparent 60%),
+    radial-gradient(circle at 30% 95%, rgba(239, 68, 68, 0.10) 0%, transparent 50%);
+}
+
+/* ============================================
+   Custom Sleek Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050816;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff;
+}
+
+html.color-red ::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+}
+
+::selection {
+  background: rgba(108, 99, 255, 0.7);
+  color: #ffffff;
+}
+
+html.color-red ::selection {
+  background: rgba(239, 68, 68, 0.7);
+  color: #ffffff;
+}
+
+/* ============================================
+   Subtle Technical Grid
+   ============================================ */
+.bg-grid-mesh {
+  background-size: 44px 44px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* ============================================
+   Gradient Text
+   ============================================ */
+.gradient-text {
+  background: linear-gradient(90deg, #6c63ff 0%, #00e5ff 60%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+html.color-red .gradient-text {
+  background: linear-gradient(90deg, #be123c 0%, #ef4444 50%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-hero {
+  background: linear-gradient(90deg, #6c63ff 0%, #00e5ff 45%, #ff4d9d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.4));
+}
+
+html.color-red .gradient-text-hero {
+  background: linear-gradient(90deg, #be123c 0%, #ef4444 45%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 35px rgba(239, 68, 68, 0.4));
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #ffffff 25%, #00e5ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.color-red .text-gradient-cyan {
+  background: linear-gradient(135deg, #ffffff 25%, #ef4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.color-red .text-gradient-blue {
+  background: linear-gradient(135deg, #fb923c 0%, #ef4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   Glassmorphism Cards
+   ============================================ */
+.glass-card {
+  background: rgba(10, 15, 36, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 10px 40px -10px rgba(0, 229, 255, 0.2), 0 0 25px rgba(108, 99, 255, 0.15);
+}
+
+html.color-red .glass-card:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 10px 40px -10px rgba(239, 68, 68, 0.2), 0 0 25px rgba(190, 18, 60, 0.15);
+}
+
+/* ============================================
+   Vibrant Action Buttons
+   ============================================ */
+.btn-gradient-primary {
+  background: linear-gradient(135deg, #6c63ff 0%, #00e5ff 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 25px rgba(108, 99, 255, 0.45);
+  transition: all 0.25s ease;
+}
+
+.btn-gradient-primary:hover {
+  box-shadow: 0 6px 35px rgba(0, 229, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+html.color-red .btn-gradient-primary {
+  background: linear-gradient(135deg, #be123c 0%, #ef4444 100%);
+  box-shadow: 0 4px 25px rgba(190, 18, 60, 0.45);
+}
+
+html.color-red .btn-gradient-primary:hover {
+  box-shadow: 0 6px 35px rgba(239, 68, 68, 0.65);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 229, 255, 0.5);
+  color: #00e5ff;
+  transform: translateY(-2px);
+}
+
+html.color-red .btn-glass:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+/* ============================================
+   RED MODE — Cyan → Red Color Cascade Overrides
+   All cyan Tailwind utilities auto-map to red
+   ============================================ */
+
+/* Text colors */
+html.color-red .text-cyan-300 { color: #fca5a5 !important; }
+html.color-red .text-cyan-400 { color: #f87171 !important; }
+html.color-red .text-cyan-500 { color: #ef4444 !important; }
+html.color-red .text-\[\#00E5FF\] { color: #ef4444 !important; }
+html.color-red .text-\[\#00e5ff\] { color: #ef4444 !important; }
+html.color-red .text-indigo-300 { color: #fdba74 !important; }
+html.color-red .text-indigo-400 { color: #fb923c !important; }
+html.color-red .text-sky-300 { color: #fca5a5 !important; }
+
+/* Background colors */
+html.color-red .bg-cyan-400 { background-color: #ef4444 !important; }
+html.color-red .bg-cyan-500 { background-color: #dc2626 !important; }
+html.color-red .bg-cyan-950\/70 { background-color: rgba(69, 10, 10, 0.7) !important; }
+html.color-red .bg-emerald-400 { background-color: #ef4444 !important; }
+
+/* Border colors */
+html.color-red .border-cyan-500\/30 { border-color: rgba(239, 68, 68, 0.3) !important; }
+html.color-red .border-cyan-500\/40 { border-color: rgba(239, 68, 68, 0.4) !important; }
+html.color-red .border-cyan-400 { border-color: #f87171 !important; }
+html.color-red .border-cyan-400\/60 { border-color: rgba(248, 113, 113, 0.6) !important; }
+html.color-red .border-cyan-500\/20 { border-color: rgba(239, 68, 68, 0.2) !important; }
+
+/* Ring */
+html.color-red .focus\:ring-cyan-400:focus { --tw-ring-color: #f87171 !important; }
+
+/* Shadows */
+html.color-red .shadow-\[0_0_20px_rgba\(0\,180\,255\,0\.25\)\] {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.25) !important;
+}
+html.color-red .shadow-\[0_0_15px_rgba\(0\,229\,255\,0\.9\)\] {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.9) !important;
+}
+html.color-red .hover\:shadow-\[0_0_20px_rgba\(0\,229\,255\,0\.4\)\]:hover {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Drop shadow on logo */
+html.color-red .drop-shadow-\[0_0_10px_rgba\(6\,182\,212\,0\.5\)\] {
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5)) !important;
+}
+html.color-red .drop-shadow-\[0_0_20px_rgba\(0\,229\,255\,0\.35\)\] {
+  filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.35)) !important;
+}
+
+/* Gradient metric text in Hero */
+html.color-red .bg-gradient-to-r.from-\[\#6c63ff\].to-\[\#00e5ff\] {
+  background: linear-gradient(to right, #be123c, #ef4444) !important;
+}
+
+/* Emerald status dot → red */
+html.color-red .text-emerald-300 { color: #fca5a5 !important; }
+
+/* Hover text colors for nav links */
+html.color-red .hover\:text-cyan-300:hover { color: #fca5a5 !important; }
+html.color-red .hover\:text-cyan-400:hover { color: #f87171 !important; }
+html.color-red .hover\:border-cyan-400:hover { border-color: #f87171 !important; }
+html.color-red .hover\:border-cyan-500\/40:hover { border-color: rgba(239, 68, 68, 0.4) !important; }
+html.color-red .hover\:border-cyan-500\/30:hover { border-color: rgba(239, 68, 68, 0.3) !important; }
+
+/* Group hover overrides */
+html.color-red .group-hover\:text-cyan-300 { color: inherit; }
+html.color-red .group:hover .group-hover\:text-cyan-300 { color: #fca5a5 !important; }
+html.color-red .group:hover .group-hover\:text-cyan-200 { color: #fecaca !important; }
+html.color-red .group:hover .group-hover\:border-cyan-500\/30 { border-color: rgba(239, 68, 68, 0.3) !important; }
+html.color-red .group:hover .group-hover\:border-cyan-400\/60 { border-color: rgba(248, 113, 113, 0.6) !important; }
+html.color-red .group:hover .group-hover\:scale-110 { }
+html.color-red .group-hover\:bg-cyan-500\/15 { background-color: rgba(239, 68, 68, 0.15) !important; }
+
+/* bg-cyan-500/8 and 10 */
+html.color-red .bg-cyan-500\/8 { background-color: rgba(239, 68, 68, 0.08) !important; }
+html.color-red .bg-cyan-500\/10 { background-color: rgba(239, 68, 68, 0.10) !important; }
+
+/* Hover shadow overrides for skill/project cards */
+html.color-red .hover\:shadow-\[0_20px_40px_-15px_rgba\(0\,229\,255\,0\.18\)\]:hover {
+  box-shadow: 0 20px 40px -15px rgba(239, 68, 68, 0.18) !important;
+}
+
+/* Via-cyan gradient line in Contact */
+html.color-red .via-cyan-400 {
+  --tw-gradient-via: #f87171 !important;
+}
+
+/* Blue LinkedIn icon → orange in red mode */
+html.color-red .text-blue-400 { color: #fb923c !important; }
+
+/* Animate-ping dot */
+html.color-red .animate-ping { }
+html.color-red .animate-pulse { }
+
+/* About section architecture card icon containers */
+html.color-red .bg-cyan-500\/10 { background-color: rgba(239, 68, 68, 0.10) !important; }
+html.color-red .border-cyan-500\/20 { border-color: rgba(239, 68, 68, 0.20) !important; }
+
+/* About badge borders */
+html.color-red .border-indigo-500\/30 { border-color: rgba(251, 146, 60, 0.3) !important; }
+html.color-red .border-purple-500\/30 { border-color: rgba(239, 68, 68, 0.3) !important; }
+html.color-red .border-blue-500\/30 { border-color: rgba(239, 68, 68, 0.3) !important; }
+html.color-red .text-indigo-300 { color: #fdba74 !important; }
+html.color-red .text-purple-300 { color: #fca5a5 !important; }
+html.color-red .text-purple-400 { color: #f87171 !important; }
+html.color-red .text-blue-300 { color: #fca5a5 !important; }
+
+/* Hero section background glow layer overrides */
+html.color-red .hero-bg-cosmic {
+  background: radial-gradient(ellipse 110% 85% at 50% 52%, rgba(136, 19, 55, 0.85) 0%, rgba(88, 28, 48, 0.7) 45%, rgba(40, 10, 20, 0.95) 75%, #050816 100%) !important;
+}
+
+html.color-red .hero-bg-glow-bottom {
+  background: radial-gradient(ellipse 85% 60% at 50% 85%, rgba(159, 18, 57, 0.7) 0%, rgba(100, 15, 35, 0.4) 50%, transparent 80%) !important;
+}
+
+html.color-red .hero-bg-glow-left {
+  background: radial-gradient(ellipse 75% 65% at 25% 40%, rgba(190, 18, 60, 0.52) 0%, rgba(255, 59, 59, 0.16) 45%, transparent 75%) !important;
+}
+
+html.color-red .hero-card-aura {
+  background: linear-gradient(135deg, rgba(190, 18, 60, 0.4), rgba(239, 68, 68, 0.3), rgba(251, 146, 60, 0.2)) !important;
+}

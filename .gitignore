@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# private local files
+thoongtin.md
+Nguyen-Hoang-Anh-Khoa-TopCV.vn-070426.164019.pdf
+cvkhoa.pdf
