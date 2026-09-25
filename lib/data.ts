@@ -1,3 +1,12 @@
+export interface ProjectCaseStudy {
+  overview: string;
+  role: string;
+  architecture: string[];
+  contributions: string[];
+  challenges: string;
+  results: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -9,6 +18,7 @@ export interface Project {
   githubUrl: string;
   demoUrl?: string;
   featured?: boolean;
+  caseStudy?: ProjectCaseStudy;
 }
 
 export interface SkillCategory {
@@ -185,8 +195,26 @@ export const portfolioData = {
         image: "/projects/ekg_main.jpg",
         detailImage: "/projects/ekg_detail.jpg",
         githubUrl: "https://github.com/bnhminh1010/ChatBot_Enterprise_knowledge_Graph.git",
-        demoUrl: "https://github.com/bnhminh1010/ChatBot_Enterprise_knowledge_Graph.git",
         featured: true,
+        caseStudy: {
+          role: "Lead Backend Architect & AI Tester",
+          overview:
+            "An enterprise knowledge graph and AI chatbot system designed to model organizational structures, personnel capabilities, and department hierarchies while answering employee inquiries via multi-tier AI services.",
+          architecture: [
+            "Neo4j graph database schema modeling 80+ employees and 300+ structural relationships via Cypher queries.",
+            "3-tier AI chatbot orchestration routing queries between local Ollama LLMs and Google Gemini AI.",
+            "JWT authentication with HttpOnly cookies & Redis metrics logging for low-latency session validation.",
+          ],
+          contributions: [
+            "Modeled corporate entity nodes, relations, and Cypher indexing strategies for fast graph traversal.",
+            "Configured automated Swagger / OpenAPI test suites for comprehensive API validation.",
+            "Designed defensive error-handling filters and token lifecycle guards across NestJS services.",
+          ],
+          challenges:
+            "Structuring non-relational graph relationships while maintaining low query response times across multi-level organizational trees.",
+          results:
+            "Successfully validated 300+ structural graph relationships with automated test suites and ironclad JWT security.",
+        },
       },
       {
         id: "thinkai-platform",
@@ -198,8 +226,26 @@ export const portfolioData = {
         image: "/projects/thinkai_main.jpg",
         detailImage: "/projects/thinkai_detail.jpg",
         githubUrl: "https://github.com/ThinkAI-team/thinkai-backend.git",
-        demoUrl: "https://github.com/ThinkAI-team/thinkai-backend.git",
         featured: true,
+        caseStudy: {
+          role: "Backend Developer & DevOps",
+          overview:
+            "A comprehensive educational backend providing structured course catalog management, user progress algorithms, and multimedia streaming delivery for online learners.",
+          architecture: [
+            "Multi-layer Spring Boot 3 REST service architecture structured around domain-driven design.",
+            "Chunked byte-range streaming delivery pipeline for multimedia lessons and embedded PDF readers.",
+            "Containerized deployment using Docker on Railway cloud infrastructure.",
+          ],
+          contributions: [
+            "Architected relational MySQL schemas with foreign-key constraints for courses, chapters, and lessons.",
+            "Built streaming controllers supporting range requests to prevent memory buffering spikes.",
+            "Configured Dockerized build pipelines for reproducible deployments to cloud environments.",
+          ],
+          challenges:
+            "Handling concurrent lesson video requests efficiently without exhausting heap memory on cloud containers.",
+          results:
+            "Delivered reliable multi-format course streaming with clean API separation and automated cloud builds.",
+        },
       },
       {
         id: "qltt-charity",
@@ -211,8 +257,26 @@ export const portfolioData = {
         image: "/projects/qltt_main.jpg",
         detailImage: "/projects/qltt_detail.jpg",
         githubUrl: "https://github.com/minhne198/DoAn_LTWeb.git",
-        demoUrl: "https://github.com/minhne198/DoAn_LTWeb.git",
         featured: false,
+        caseStudy: {
+          role: "Fullstack / Backend Developer",
+          overview:
+            "A public fundraising and transparent donation tracking platform ensuring full accountability and verifiable records for charitable campaigns.",
+          architecture: [
+            "ASP.NET Core 8.0 MVC architecture leveraging Entity Framework Core (Code-First migrations).",
+            "Relational database design on Microsoft SQL Server with strict ACID transactional guarantees.",
+            "Server-rendered dynamic views with real-time financial progress calculation.",
+          ],
+          contributions: [
+            "Engineered prioritized campaign querying algorithms and categorical filtering pipelines.",
+            "Built atomic financial transaction logging to record donor contributions safely.",
+            "Developed responsive administrative portals for campaign approval and donation ledger audits.",
+          ],
+          challenges:
+            "Ensuring transactional consistency and preventing race conditions during concurrent donation submissions.",
+          results:
+            "Delivered a fully functional, transparent fundraising system with verified transactional accuracy.",
+        },
       },
       {
         id: "apexcloud-gateway",
@@ -221,12 +285,31 @@ export const portfolioData = {
         description:
           "Engineered a lightweight edge gateway featuring distributed token-bucket rate limiting, automatic JWT verification, and zero-downtime health probing across upstream microservices.",
         tags: ["Node.js", "TypeScript", "Redis", "Docker", "NGINX", "Security"],
-        image: "/projects/ekg_main.jpg",
-        detailImage: "/projects/ekg_detail.jpg",
+        image: "/projects/apexcloud_arch.svg",
+        detailImage: "/projects/apexcloud_arch.svg",
         githubUrl: "https://github.com/anhkhoa1112",
         featured: false,
+        caseStudy: {
+          role: "Systems Architect & Developer",
+          overview:
+            "A high-concurrency API edge gateway and reverse proxy built to protect upstream microservices from traffic surges and enforce centralized security policies.",
+          architecture: [
+            "High-throughput asynchronous reverse proxy layer built in Node.js and TypeScript.",
+            "Distributed token-bucket rate limiter with sliding-window evaluation backed by Redis in-memory storage.",
+            "Centralized JWT verification header inspection and automated upstream health probing.",
+          ],
+          contributions: [
+            "Implemented rate-limiting algorithms with atomic Redis operations to prevent API abuse.",
+            "Structured edge authentication so downstream services receive pre-validated security claims.",
+            "Configured Dockerized multi-stage containerization with zero-downtime health checking probes.",
+          ],
+          challenges:
+            "Enforcing low-latency distributed rate limiting across concurrent requests without incurring significant network round-trip delays.",
+          results:
+            "Robust edge traffic filtering, zero-downtime upstream health monitoring, and modular reverse proxy routing.",
+        },
       },
-    ],
+    ] as Project[],
   },
 
   experience: {

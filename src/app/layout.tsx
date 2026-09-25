@@ -55,6 +55,13 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bi Nè — Software Developer | Digital Identity & Systems",
+    description:
+      "Engineering Scalable Systems with Precision & Craft. Explore full-stack projects, architecture case studies, and 3D digital identity.",
+    images: ["/avatar.jpg"],
+  },
 };
 
 export default function RootLayout({

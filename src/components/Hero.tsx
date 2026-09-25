@@ -37,12 +37,12 @@ export const Hero: React.FC = () => {
       <div className="w-full min-h-screen flex flex-col justify-center relative z-10 px-4 sm:px-6 lg:px-12 py-12 lg:py-0 overflow-visible">
         {/* Main 2-Column Full-Width Grid: Left Typography (z-20) & Right 3D Card (z-10) */}
         <div className="relative flex flex-col lg:grid lg:grid-cols-2 min-h-screen items-center gap-6 lg:gap-8 overflow-visible w-full">
-          {/* ================= LEFT COLUMN: Typography & CTAs (z-20 so card slides UNDER text) ================= */}
+          {/* ================= LEFT COLUMN: Typography & CTAs (order-1 on mobile & desktop) ================= */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left pt-20 sm:pt-24 lg:pt-0 px-2 sm:px-4 lg:pl-10 xl:pl-16 order-2 lg:order-1 relative z-20 w-full pointer-events-auto"
+            className="flex flex-col justify-center items-center text-center lg:items-start lg:text-left pt-20 sm:pt-24 lg:pt-0 px-2 sm:px-4 lg:pl-10 xl:pl-16 order-1 lg:order-1 relative z-20 w-full pointer-events-auto"
           >
             <div className="w-full max-w-xl">
               {/* Technical Eyebrow / Welcome Tag */}
@@ -70,14 +70,13 @@ export const Hero: React.FC = () => {
                 <span>Software Developer &amp; Systems Architect</span>
               </div>
 
-              {/* Subtitle Bio */}
+              {/* Subtitle Bio - Unified Professional English */}
               <p className="mt-5 text-sm sm:text-base text-slate-200 font-normal leading-relaxed">
-                Sinh viên Công nghệ Phần mềm tại <strong className="text-cyan-300 font-semibold">HUTECH University</strong>. Chuyên sâu phát triển hệ thống backend hiệu năng cao (<span className="text-indigo-300 font-semibold">NestJS, TypeScript</span>), cơ sở dữ liệu đồ thị <span className="text-sky-300 font-semibold">Neo4j</span>, kiến trúc microservices và trải nghiệm kỹ thuật số 3D tương tác.
+                Software Engineering student at <strong className="text-cyan-300 font-semibold">HUTECH University</strong> focusing on high-performance backend systems across the <span className="text-cyan-400 font-semibold">.NET</span>, <span className="text-cyan-400 font-semibold">Spring Boot</span>, and <span className="text-cyan-400 font-semibold">Node.js</span> ecosystems. Experienced in architecting resilient REST APIs, robust database models (SQL &amp; Neo4j), and scalable distributed services.
               </p>
 
-              {/* Action CTA Buttons Row (Exact Davin Aesthetic) */}
-              <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                {/* Primary CTA: Download CV */}
+              {/* Primary Action CTAs: Download CV & Contact Me */}
+              <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
                 <a
                   href={contact.cvUrl}
                   download="NguyenHoangAnhKhoa_CV.pdf"
@@ -87,57 +86,58 @@ export const Hero: React.FC = () => {
                   <span>Download CV</span>
                 </a>
 
-                {/* GitHub Button */}
-                <a
-                  href={contact.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-glass px-5 py-3 rounded-xl font-medium text-sm sm:text-base flex items-center gap-2 active:scale-95"
-                >
-                  <Github className="w-4 h-4" />
-                  <span>GitHub</span>
-                </a>
-
-                {/* LinkedIn Button */}
-                <a
-                  href={contact.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-glass px-5 py-3 rounded-xl font-medium text-sm sm:text-base flex items-center gap-2 active:scale-95"
-                >
-                  <Linkedin className="w-4 h-4" />
-                  <span>LinkedIn</span>
-                </a>
-
-                {/* Flip ID Card Button */}
-                <button
-                  type="button"
-                  onClick={handleFlipCard}
-                  className="btn-glass px-4 py-3 rounded-xl font-medium text-sm sm:text-base flex items-center gap-2 active:scale-95 text-slate-200 hover:text-cyan-300"
-                  aria-label="Flip Developer ID Card"
-                >
-                  <RotateCw className="w-4 h-4 text-cyan-400" />
-                  <span>Flip Card</span>
-                </button>
-              </div>
-
-              {/* Secondary CTA: Contact Me */}
-              <div className="mt-4 flex items-center justify-center lg:justify-start gap-3">
                 <a
                   href="#contact"
-                  className="btn-glass px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-2 active:scale-95 hover:border-cyan-400"
+                  className="btn-glass px-5 py-3 rounded-xl text-sm sm:text-base font-semibold flex items-center gap-2 active:scale-95 hover:border-cyan-400"
                 >
                   <Mail className="w-4 h-4 text-cyan-400" />
                   <span>Contact Me</span>
                 </a>
-                <span className="text-slate-500 text-xs font-mono">•</span>
-                <span className="text-cyan-400 text-xs font-mono font-medium">Ho Chi Minh City, Vietnam</span>
+              </div>
+
+              {/* Secondary Actions: Social Links, Flip Toggle & Location */}
+              <div className="mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                <a
+                  href={contact.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-glass px-3.5 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-1.5 active:scale-95 text-slate-300 hover:text-white"
+                  title="GitHub Profile"
+                >
+                  <Github className="w-3.5 h-3.5" />
+                  <span>GitHub</span>
+                </a>
+
+                <a
+                  href={contact.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-glass px-3.5 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-1.5 active:scale-95 text-slate-300 hover:text-white"
+                  title="LinkedIn Profile"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                  <span>LinkedIn</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={handleFlipCard}
+                  className="btn-glass px-3.5 py-2 rounded-lg font-mono text-xs flex items-center gap-1.5 active:scale-95 text-cyan-400/90 hover:text-cyan-300 border-cyan-500/20"
+                  aria-label="Flip Developer ID Card"
+                  title="Flip 3D Card"
+                >
+                  <RotateCw className="w-3 h-3 text-cyan-400" />
+                  <span>Flip 3D Card</span>
+                </button>
+
+                <span className="text-slate-500 text-xs font-mono hidden sm:inline">•</span>
+                <span className="text-slate-400 text-xs font-mono font-medium">Ho Chi Minh City, Vietnam</span>
               </div>
             </div>
           </motion.div>
 
-          {/* ================= RIGHT COLUMN: Medium 3D ID Card (z-10 so it slides UNDER left text) ================= */}
-          <div className="flex justify-center items-center h-full min-h-[520px] sm:min-h-[580px] lg:min-h-screen w-full order-1 lg:order-2 overflow-visible relative z-10 pointer-events-none">
+          {/* ================= RIGHT COLUMN: Medium 3D ID Card (order-2 on mobile & desktop) ================= */}
+          <div className="flex justify-center items-center h-full min-h-[520px] sm:min-h-[580px] lg:min-h-screen w-full order-2 lg:order-2 overflow-visible relative z-10 pointer-events-none">
             <div className="relative z-0 flex h-[100vh] w-full items-center justify-center sm:h-[520px] md:h-[580px] lg:h-[640px] lg:w-[180vw] xl:h-[700px] lg:-ml-[360px] xl:-ml-[420px] overflow-visible pointer-events-auto">
               {/* Davin multi-color ambient aura behind card */}
               <div
@@ -175,16 +175,18 @@ export const Hero: React.FC = () => {
             </div>
           ))}
         </motion.div>
-      </div>
 
-      {/* Floating Scroll Down Indicator (like Davin's site) */}
-      <a
-        href="#about"
-        className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 p-2.5 rounded-full border border-white/10 bg-[#0a1638]/70 backdrop-blur-sm text-slate-300 hover:text-white hover:border-cyan-400 transition-all active:scale-95"
-        aria-label="Scroll down to About section"
-      >
-        <ArrowDown className="w-4 h-4 text-cyan-300 animate-bounce" />
-      </a>
+        {/* Scroll Down Indicator - Placed naturally below metrics to prevent overlap on smaller heights */}
+        <div className="mt-8 mb-2 flex justify-center relative z-30">
+          <a
+            href="#about"
+            className="p-2.5 rounded-full border border-white/10 bg-[#0a1638]/70 backdrop-blur-sm text-slate-300 hover:text-white hover:border-cyan-400 transition-all active:scale-95 shadow-md"
+            aria-label="Scroll down to About section"
+          >
+            <ArrowDown className="w-4 h-4 text-cyan-300 animate-bounce" />
+          </a>
+        </div>
+      </div>
     </section>
   );
 };

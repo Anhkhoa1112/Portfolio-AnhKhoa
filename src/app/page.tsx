@@ -6,6 +6,7 @@ import { Projects } from "@/src/components/Projects";
 import { Experience } from "@/src/components/Experience";
 import { Contact } from "@/src/components/Contact";
 import { Footer } from "@/src/components/Footer";
+import { DigitalFox } from "@/src/components/DigitalFox";
 
 export default function Home() {
   return (
@@ -36,6 +37,9 @@ export default function Home() {
 
       {/* FOOTER */}
       <Footer />
+
+      {/* Persistent 3D Digital Fox Companion */}
+      <DigitalFox />
     </div>
   );
 }
