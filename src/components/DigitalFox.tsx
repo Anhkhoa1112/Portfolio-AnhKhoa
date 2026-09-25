@@ -5,6 +5,12 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, Center } from "@react-three/drei";
 import { FoxIdleAnimation } from "./FoxIdleAnimation";
+import {
+  detectFoxPerformanceTier,
+  FOX_PERFORMANCE_TIERS,
+  type FoxPerformanceTier,
+  type PerformanceTierConfig,
+} from "./fox/FoxPerformanceManager";
 
 const FOX_MODEL_PATH = "/models/fox.glb";
 
@@ -82,6 +88,9 @@ export interface FoxModelProps {
   position?: [number, number, number];
   rotation?: [number, number, number];
   idleAnimation?: boolean;
+  isHovered?: boolean;
+  clickTrigger?: number;
+  tierConfig?: PerformanceTierConfig;
 }
 
 /**
@@ -89,10 +98,13 @@ export interface FoxModelProps {
  * and procedural FoxIdleAnimation controller.
  */
 export function FoxModel({
-  scale = 1.0,
+  scale = 1.3,
   position = [0, 0, 0],
-  rotation = [0, 0, 0],
+  rotation = [0, -0.65, 0],
   idleAnimation = true,
+  isHovered = false,
+  clickTrigger = 0,
+  tierConfig,
 }: FoxModelProps) {
   const { scene } = useGLTF(FOX_MODEL_PATH);
 
@@ -102,6 +114,12 @@ export function FoxModel({
       if ((child as THREE.Mesh).isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
+        // Fine-tune material roughness floor to eliminate harsh plastic shine while keeping metallic luster
+        const mat = (child as THREE.Mesh).material as THREE.MeshStandardMaterial;
+        if (mat && mat.isMeshStandardMaterial) {
+          mat.roughness = Math.max(mat.roughness ?? 0.4, 0.42);
+          mat.needsUpdate = true;
+        }
       }
     });
 
@@ -122,7 +140,12 @@ export function FoxModel({
     <group position={position} rotation={rotation} scale={resolvedScale}>
       {/* Center component normalizes model bounds to origin */}
       <Center>
-        <FoxIdleAnimation enabled={idleAnimation}>
+        <FoxIdleAnimation
+          enabled={idleAnimation}
+          isHovered={isHovered}
+          clickTrigger={clickTrigger}
+          tierConfig={tierConfig}
+        >
           <primitive object={scene} />
         </FoxIdleAnimation>
       </Center>
@@ -145,19 +168,36 @@ export interface DigitalFoxProps {
  * When companion=false, fills its parent container (e.g. for /fox-test inspection).
  */
 export const DigitalFox: React.FC<DigitalFoxProps> = ({
-  scale = 1.0,
+  scale = 1.3,
   position = [0, 0, 0],
-  rotation = [0, 0, 0],
+  rotation,
   className = "",
   companion = true,
   idleAnimation = true,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [tier, setTier] = useState<FoxPerformanceTier>("HIGH");
+
+  const handleClick = () => {
+    setClickCount((c) => c + 1);
+  };
 
   useEffect(() => {
     setIsMounted(true);
+    if (typeof window !== "undefined") {
+      const updateTier = () => {
+        setTier(detectFoxPerformanceTier());
+      };
+      updateTier();
+      window.addEventListener("resize", updateTier, { passive: true });
+      return () => window.removeEventListener("resize", updateTier);
+    }
   }, []);
 
+  const tierConfig = FOX_PERFORMANCE_TIERS[tier];
+  const defaultRotation: [number, number, number] = rotation ?? [0, -0.65, 0];
   const fallback = companion ? <FoxCompanionLoadingFallback /> : <FoxFullLoadingFallback />;
 
   // Avoid SSR / hydration mismatch for WebGL canvas
@@ -166,9 +206,9 @@ export const DigitalFox: React.FC<DigitalFoxProps> = ({
     return (
       <aside
         aria-label="Digital Fox Companion"
-        className={`fixed right-6 bottom-6 z-30 pointer-events-none select-none
-                   w-[95px] h-[115px] sm:w-[130px] sm:h-[155px] lg:w-[170px] lg:h-[200px]
-                   hidden min-[380px]:block overflow-visible ${className}`}
+        className={`fixed right-3 bottom-3 sm:right-6 sm:bottom-6 lg:right-8 lg:bottom-6 z-30 pointer-events-none select-none
+                   w-[105px] h-[125px] min-[480px]:w-[125px] min-[480px]:h-[150px] sm:w-[220px] sm:h-[260px] lg:w-[300px] lg:h-[340px] xl:w-[320px] xl:h-[360px]
+                   hidden min-[360px]:block overflow-visible ${className}`}
       >
         {fallback}
       </aside>
@@ -178,33 +218,41 @@ export const DigitalFox: React.FC<DigitalFoxProps> = ({
   const canvasContent = (
     <WebGLErrorBoundary fallback={fallback}>
       <Canvas
-        camera={{ position: [0, 0.05, 2.3], fov: 42 }}
+        camera={{ position: [0, -0.02, 1.76], fov: 42 }}
         gl={{
           alpha: true,
           antialias: true,
           powerPreference: "high-performance",
         }}
-        dpr={[1, 2]}
+        dpr={tierConfig.dpr}
         style={{
-          pointerEvents: "none",
+          pointerEvents: "auto",
           background: "transparent",
           width: "100%",
           height: "100%",
         }}
       >
-        {/* Calibrated neutral PBR lighting for original textures and metallic/specular maps */}
-        <ambientLight intensity={1.2} />
-        <directionalLight position={[4, 6, 5]} intensity={1.8} />
-        <directionalLight position={[-5, 4, 3]} intensity={1.4} />
-        <directionalLight position={[0, 4, -5]} intensity={1.2} />
-        <directionalLight position={[0, -3, 3]} intensity={0.5} />
+        {/* Calibrated PBR lighting with natural hemisphere fill and crisp rim light */}
+        <hemisphereLight args={["#cce7ff", "#181424", 0.9]} />
+        <ambientLight intensity={0.6} />
+        {/* Main key light */}
+        <directionalLight position={[4, 5, 4]} intensity={1.5} color="#ffffff" />
+        {/* Soft fill light */}
+        <directionalLight position={[-4, 3, 2]} intensity={0.9} color="#e0f2fe" />
+        {/* Rim / kicker light behind fox for fur & 3-tail silhouette definition against dark backdrop */}
+        <directionalLight position={[-3, 4, -5]} intensity={2.2} color="#a5f3fc" />
+        {/* Front-under bounce */}
+        <directionalLight position={[0, -2, 3]} intensity={0.4} color="#fef08a" />
 
         <Suspense fallback={null}>
           <FoxModel
             scale={scale}
             position={position}
-            rotation={rotation}
+            rotation={defaultRotation}
             idleAnimation={idleAnimation}
+            isHovered={isHovered}
+            clickTrigger={clickCount}
+            tierConfig={tierConfig}
           />
         </Suspense>
       </Canvas>
@@ -214,20 +262,36 @@ export const DigitalFox: React.FC<DigitalFoxProps> = ({
   if (companion) {
     return (
       <aside
-        aria-label="Digital Fox Companion"
-        className={`fixed right-6 bottom-6 z-30 pointer-events-none select-none
-                   w-[95px] h-[115px] sm:w-[130px] sm:h-[155px] lg:w-[170px] lg:h-[200px]
-                   hidden min-[380px]:block overflow-visible ${className}`}
+        role="button"
+        tabIndex={0}
+        aria-label="Digital Fox Companion — Click to interact"
+        onClick={handleClick}
+        onTouchStart={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        onPointerEnter={() => setIsHovered(true)}
+        onPointerLeave={() => setIsHovered(false)}
+        className={`fixed right-3 bottom-3 sm:right-6 sm:bottom-6 lg:right-8 lg:bottom-6 z-30 pointer-events-auto select-none
+                   w-[105px] h-[125px] min-[480px]:w-[125px] min-[480px]:h-[150px] sm:w-[220px] sm:h-[260px] lg:w-[300px] lg:h-[340px] xl:w-[320px] xl:h-[360px]
+                   hidden min-[360px]:block overflow-visible cursor-pointer transition-transform duration-300 ease-out active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 rounded-2xl ${className}`}
       >
         {/* Subtle ambient soft glow beneath the fox */}
-        <div className="absolute inset-x-2 bottom-2 h-14 -z-10 rounded-full bg-cyan-500/[0.04] blur-xl pointer-events-none" />
+        <div className="absolute inset-x-6 bottom-4 h-20 -z-10 rounded-full bg-cyan-500/[0.07] blur-2xl pointer-events-none" />
         {canvasContent}
       </aside>
     );
   }
 
   return (
-    <div className={`relative w-full h-full pointer-events-none select-none ${className}`}>
+    <div
+      onPointerEnter={() => setIsHovered(true)}
+      onPointerLeave={() => setIsHovered(false)}
+      className={`relative w-full h-full pointer-events-auto select-none ${className}`}
+    >
       {canvasContent}
     </div>
   );

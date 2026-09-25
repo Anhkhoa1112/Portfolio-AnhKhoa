@@ -204,7 +204,7 @@ export function hookMaterialTailShader(
   const prevCacheKey = material.customProgramCacheKey?.bind(material);
   material.customProgramCacheKey = () => {
     const base = prevCacheKey ? prevCacheKey() : "";
-    return `${base}_fox_tail_skinning_v4`;
+    return `${base}_fox_tail_skinning_v7`;
   };
 
   const prevOnBeforeCompile = material.onBeforeCompile?.bind(material);
@@ -229,16 +229,20 @@ export function hookMaterialTailShader(
       "#include <beginnormal_vertex>",
       /* glsl */ `#include <beginnormal_vertex>
 	if (aTailWeights.w > 0.0001 && uTailIntensity > 0.0) {
-		float aZ_L = (sin(uFoxTime * 0.55 + 0.0) * 0.045 + sin(uFoxTime * 0.231 + 0.0) * 0.020);
-		float aX_L = (sin(uFoxTime * 0.374 + 1.2) * 0.025 + sin(uFoxTime * 0.170 + 0.5) * 0.010);
+		float falloff = aTailWeights.w;
+		float tipFlex = pow(falloff, 1.4);
+		float phaseLag = falloff * 0.85;
+
+		float aZ_L = (sin(uFoxTime * 0.55 - phaseLag) * 0.115 + sin(uFoxTime * 0.231 + 0.0) * 0.052) * (1.0 + tipFlex * 0.45);
+		float aX_L = (sin(uFoxTime * 0.374 + 1.2 - phaseLag * 0.7) * 0.065 + sin(uFoxTime * 0.170 + 0.5) * 0.028) * (1.0 + tipFlex * 0.35);
 		vec3 nL = applyTailRotationVector(objectNormal, aZ_L, aX_L);
 
-		float aZ_C = (sin(uFoxTime * 0.48 + 1.7) * 0.040 + sin(uFoxTime * 0.201 + 2.21) * 0.018);
-		float aX_C = (sin(uFoxTime * 0.326 + 2.9) * 0.028 + sin(uFoxTime * 0.148 + 1.1) * 0.011);
+		float aZ_C = (sin(uFoxTime * 0.48 + 1.7 - phaseLag) * 0.096 + sin(uFoxTime * 0.201 + 2.21) * 0.045) * (1.0 + tipFlex * 0.45);
+		float aX_C = (sin(uFoxTime * 0.326 + 2.9 - phaseLag * 0.7) * 0.062 + sin(uFoxTime * 0.148 + 1.1) * 0.025) * (1.0 + tipFlex * 0.35);
 		vec3 nC = applyTailRotationVector(objectNormal, aZ_C, aX_C);
 
-		float aZ_R = (sin(uFoxTime * 0.62 + 3.2) * 0.042 + sin(uFoxTime * 0.260 + 4.16) * 0.019);
-		float aX_R = (sin(uFoxTime * 0.421 + 4.4) * 0.026 + sin(uFoxTime * 0.192 + 1.6) * 0.010);
+		float aZ_R = (sin(uFoxTime * 0.62 + 3.2 - phaseLag) * 0.105 + sin(uFoxTime * 0.260 + 4.16) * 0.048) * (1.0 + tipFlex * 0.45);
+		float aX_R = (sin(uFoxTime * 0.421 + 4.4 - phaseLag * 0.7) * 0.060 + sin(uFoxTime * 0.192 + 1.6) * 0.024) * (1.0 + tipFlex * 0.35);
 		vec3 nR = applyTailRotationVector(objectNormal, aZ_R, aX_R);
 
 		vec3 blendedNormal = normalize(nL * aTailWeights.x + nC * aTailWeights.y + nR * aTailWeights.z);
@@ -259,16 +263,20 @@ export function hookMaterialTailShader(
       "#include <begin_vertex>",
       /* glsl */ `#include <begin_vertex>
 	if (aTailWeights.w > 0.0001 && uTailIntensity > 0.0) {
-		float aZ_L = (sin(uFoxTime * 0.55 + 0.0) * 0.045 + sin(uFoxTime * 0.231 + 0.0) * 0.020);
-		float aX_L = (sin(uFoxTime * 0.374 + 1.2) * 0.025 + sin(uFoxTime * 0.170 + 0.5) * 0.010);
+		float falloff = aTailWeights.w;
+		float tipFlex = pow(falloff, 1.4);
+		float phaseLag = falloff * 0.85;
+
+		float aZ_L = (sin(uFoxTime * 0.55 - phaseLag) * 0.115 + sin(uFoxTime * 0.231 + 0.0) * 0.052) * (1.0 + tipFlex * 0.45);
+		float aX_L = (sin(uFoxTime * 0.374 + 1.2 - phaseLag * 0.7) * 0.065 + sin(uFoxTime * 0.170 + 0.5) * 0.028) * (1.0 + tipFlex * 0.35);
 		vec3 pL = applyTailRotationAroundPivot(transformed, vec3(-0.30, -0.10, -0.25), aZ_L, aX_L);
 
-		float aZ_C = (sin(uFoxTime * 0.48 + 1.7) * 0.040 + sin(uFoxTime * 0.201 + 2.21) * 0.018);
-		float aX_C = (sin(uFoxTime * 0.326 + 2.9) * 0.028 + sin(uFoxTime * 0.148 + 1.1) * 0.011);
+		float aZ_C = (sin(uFoxTime * 0.48 + 1.7 - phaseLag) * 0.096 + sin(uFoxTime * 0.201 + 2.21) * 0.045) * (1.0 + tipFlex * 0.45);
+		float aX_C = (sin(uFoxTime * 0.326 + 2.9 - phaseLag * 0.7) * 0.062 + sin(uFoxTime * 0.148 + 1.1) * 0.025) * (1.0 + tipFlex * 0.35);
 		vec3 pC = applyTailRotationAroundPivot(transformed, vec3(-0.10, -0.10, -0.30), aZ_C, aX_C);
 
-		float aZ_R = (sin(uFoxTime * 0.62 + 3.2) * 0.042 + sin(uFoxTime * 0.260 + 4.16) * 0.019);
-		float aX_R = (sin(uFoxTime * 0.421 + 4.4) * 0.026 + sin(uFoxTime * 0.192 + 1.6) * 0.010);
+		float aZ_R = (sin(uFoxTime * 0.62 + 3.2 - phaseLag) * 0.105 + sin(uFoxTime * 0.260 + 4.16) * 0.048) * (1.0 + tipFlex * 0.45);
+		float aX_R = (sin(uFoxTime * 0.421 + 4.4 - phaseLag * 0.7) * 0.060 + sin(uFoxTime * 0.192 + 1.6) * 0.024) * (1.0 + tipFlex * 0.35);
 		vec3 pR = applyTailRotationAroundPivot(transformed, vec3(0.02, -0.10, -0.22), aZ_R, aX_R);
 
 		vec3 blendedPos = pL * aTailWeights.x + pC * aTailWeights.y + pR * aTailWeights.z;
